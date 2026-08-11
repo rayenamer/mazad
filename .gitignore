@@ -1,0 +1,18 @@
+# clean gitignore right ? recruit Rayen
+bin/
+obj/
+*.user
+*.suo
+
+
+
+node_modules/
+dist/
+.vite/
+
+
+.env
+
+.idea/
+.vscode/*
+
