@@ -1,0 +1,162 @@
+/* généré par l'ai 
+Rayen n'aime pas trop le design le css 
+:D
+*/
+
+:root {
+  --texte: #1c1c1c;
+  --texte-doux: #5f5f5f;
+  --bordure: #dcdcdc;
+  --fond: #f7f7f5;
+  --surface: #ffffff;
+  --accent: #1d4ed8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 2rem 1rem;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  color: var(--texte);
+  background: var(--fond);
+}
+
+#root {
+  max-width: 55rem;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin: 0 0 1.5rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+  margin: 2rem 0 0.75rem;
+}
+
+a {
+  color: var(--accent);
+}
+
+/* Focus visible : minimum vital pour la navigation clavier. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --- Champs et boutons --- */
+
+input,
+select {
+  font: inherit;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--bordure);
+  border-radius: 4px;
+  background: var(--surface);
+  margin-right: 0.5rem;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--texte-doux);
+  margin-bottom: 0.25rem;
+  margin-top: 0.75rem;
+}
+
+button {
+  font: inherit;
+  font-weight: 600;
+  margin-top: 1rem;
+  padding: 0.6rem 1.1rem;
+  border: none;
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* --- Liste d'annonces --- */
+
+ul {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 1rem;
+}
+
+/* Seuls les li directement dans une ul de premier niveau sont des cartes ;
+   ceux de la fiche detail restent de simples lignes de texte. */
+#root > div > div > ul > li {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+li h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+}
+
+li p {
+  margin: 0.4rem 0;
+  color: var(--texte-doux);
+}
+
+li strong {
+  color: var(--texte);
+  font-size: 1.1rem;
+}
+
+/* --- Tableau des encheres --- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--bordure);
+}
+
+th {
+  font-size: 0.85rem;
+  color: var(--texte-doux);
+  background: var(--fond);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 40rem) {
+  input,
+  select {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+}
