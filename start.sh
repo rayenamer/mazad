@@ -14,5 +14,4 @@ sleep 5
 
 echo "==> Frontend sur http://localhost:5173"
 cd frontend
-npm install
 npm run dev

@@ -59,17 +59,6 @@ export default function AnnonceDetailPage() {
         setChargement(false)
       })
   }, [id])
-  useEffect(() => {
-  if (!id) {
-    return
-  }
-
-  const timer = setInterval(() => {
-    obtenirAnnonce(id).then(setAnnonce).catch(() => {})
-  }, 5000)
-
-  return () => clearInterval(timer)
-}, [id])
 
   async function envoyer() {
     if (!id || !annonce) {

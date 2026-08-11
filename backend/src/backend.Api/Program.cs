@@ -12,9 +12,20 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<AnnonceService>();
 
-builder.Services.AddSingleton<IAnnonceRepository>(_ =>
-    InMemoryAnnonceRepository.DepuisFichier(
-        Path.Combine(AppContext.BaseDirectory, "Data", "annonces.json")));
+//je construis le chemin
+
+string chemin = Path.Combine(
+    AppContext.BaseDirectory,
+    "Data",
+    "annonces.json"
+);
+//je charge data
+IAnnonceRepository repository =
+    InMemoryAnnonceRepository.DepuisFichier(chemin);
+
+//enregistre le repository dans l'app
+
+builder.Services.AddSingleton<IAnnonceRepository>(repository);
 
 // l'import marche , on enléve cette ligne :D
 

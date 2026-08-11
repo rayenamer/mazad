@@ -5,6 +5,7 @@ namespace Backend.Api.Repositories;
 
 public class InMemoryAnnonceRepository : IAnnonceRepository
 {
+    //stockage en memoire
     private readonly Dictionary<Guid, Annonce> _annonces;
 
     // Constructeur utilisé par les tests : on injecte directement les annonces.
