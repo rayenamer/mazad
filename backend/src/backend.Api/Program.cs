@@ -16,10 +16,12 @@ builder.Services.AddSingleton<IAnnonceRepository>(_ =>
     InMemoryAnnonceRepository.DepuisFichier(
         Path.Combine(AppContext.BaseDirectory, "Data", "annonces.json")));
 
-Console.WriteLine($"{builder.Services.BuildServiceProvider().GetRequiredService<IAnnonceRepository>().GetAll().Count()} annonces chargées");
-
+// l'import marche , on enléve cette ligne :D
 
 var app = builder.Build();
+
+
+app.UseMiddleware<Backend.Api.Infrastructure.ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

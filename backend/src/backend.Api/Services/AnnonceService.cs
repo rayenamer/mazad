@@ -31,7 +31,6 @@ public class AnnonceService
             annonces.Add(annonce);
         }
 
-        annonces.Sort(ComparerParUrgence);
 
         var resultat = new List<AnnonceDto>();
 
@@ -148,15 +147,4 @@ public class AnnonceService
         return annonce.Description.Contains(terme, StringComparison.OrdinalIgnoreCase);
     }
 
-    //false en cours
-    //true termine
-    private static int ComparerParUrgence(Annonce a, Annonce b)
-    {
-        if (a.EstTerminee != b.EstTerminee)
-        {
-            return a.EstTerminee ? 1 : -1;
-        }
-
-        return a.DateFin.CompareTo(b.DateFin);
-    }
 }
