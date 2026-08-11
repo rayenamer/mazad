@@ -56,10 +56,7 @@ public class AnnonceService
         var pseudo = dto!.Pseudo!.Trim();
         var montant = dto.Montant!.Value;
 
-        if (dto.Pseudo == null || dto.Pseudo.Trim().Length == 0)
-        {
-            throw new ValidationException("Le pseudo est obligatoire.");
-        }
+        
 
         var annonce = TrouverAnnonce(id);
 
@@ -123,6 +120,7 @@ public class AnnonceService
         {
             throw new ValidationException("Le pseudo doit faire au moins 3 caractères.");
         }
+        
     }
 
     private static bool CorrespondAuStatut(Annonce annonce, string? statut)
