@@ -14,7 +14,7 @@ Vous trouverez les notes et informations complémentaires du projet dans le fich
 Élève ingénieur — ESIEE-IT Paris
 
 * 💼 [LinkedIn](www.linkedin.com/in/rayen-ameur-10000s000/)
-* 📧 [Email](rayen.ameur@outlook.com)
+* 📧 (rayen.ameur@outlook.com)
 ---
 
 © 2026 Rayen Ameur
