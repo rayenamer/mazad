@@ -9,5 +9,8 @@
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="../../../data/annonces.json" Link="Data/annonces.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
 </Project>

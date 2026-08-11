@@ -1,0 +1,55 @@
+[
+  {
+    "id": "a1f4c2d0-0001-4b6e-9c11-000000000001",
+    "titre": "Renault Kangoo 2016 - 142 000 km",
+    "description": "Véhicule utilitaire de la flotte municipale. Contrôle technique OK, quelques rayures sur la carrosserie.",
+    "prixDepart": 3500,
+    "pasEnchere": 100,
+    "dateFin": "2099-12-31T18:00:00Z",
+    "encheres": [
+      { "pseudo": "brico77", "montant": 3600, "date": "2026-07-10T09:15:00Z" },
+      { "pseudo": "garage-leblanc", "montant": 3800, "date": "2026-07-11T14:32:00Z" }
+    ]
+  },
+  {
+    "id": "a1f4c2d0-0002-4b6e-9c11-000000000002",
+    "titre": "Lot de 25 chaises de bureau",
+    "description": "Chaises de bureau à roulettes, état correct, issues du renouvellement du mobilier de la mairie.",
+    "prixDepart": 200,
+    "pasEnchere": 20,
+    "dateFin": "2099-11-30T12:00:00Z",
+    "encheres": []
+  },
+  {
+    "id": "a1f4c2d0-0003-4b6e-9c11-000000000003",
+    "titre": "Tracteur tondeuse John Deere X350",
+    "description": "Utilisé par les services espaces verts. Entretien régulier, 480 heures au compteur.",
+    "prixDepart": 1800,
+    "pasEnchere": 50,
+    "dateFin": "2099-10-15T17:00:00Z",
+    "encheres": [
+      { "pseudo": "paysagiste94", "montant": 1850, "date": "2026-07-08T10:05:00Z" }
+    ]
+  },
+  {
+    "id": "a1f4c2d0-0004-4b6e-9c11-000000000004",
+    "titre": "Lot de 10 PC portables Dell Latitude 5490",
+    "description": "i5 8e génération, 8 Go RAM, SSD 256 Go. Reconditionnés, sans licence Windows.",
+    "prixDepart": 900,
+    "pasEnchere": 50,
+    "dateFin": "2020-01-15T12:00:00Z",
+    "encheres": [
+      { "pseudo": "assoinformatik", "montant": 950, "date": "2020-01-10T16:40:00Z" },
+      { "pseudo": "recyclepc", "montant": 1100, "date": "2020-01-12T09:22:00Z" }
+    ]
+  },
+  {
+    "id": "a1f4c2d0-0005-4b6e-9c11-000000000005",
+    "titre": "Piano droit Yamaha (école de musique)",
+    "description": "Piano droit en bon état général, à réaccorder. Enlèvement sur place uniquement.",
+    "prixDepart": 600,
+    "pasEnchere": 25,
+    "dateFin": "2099-09-01T20:00:00Z",
+    "encheres": []
+  }
+]
