@@ -56,6 +56,11 @@ public class AnnonceService
         var pseudo = dto!.Pseudo!.Trim();
         var montant = dto.Montant!.Value;
 
+        if (dto.Pseudo == null || dto.Pseudo.Trim().Length == 0)
+        {
+            throw new ValidationException("Le pseudo est obligatoire.");
+        }
+
         var annonce = TrouverAnnonce(id);
 
         if (annonce.EstTerminee)
@@ -63,9 +68,14 @@ public class AnnonceService
             throw new ConflictException("Cette vente est terminée.");
         }
 
+        if (montant <= annonce.PrixActuel)
+        {
+            throw new ConflictException("L'enchère doit dépasser le prix actuel de " + annonce.PrixActuel + " €.");
+        }
+
         if (montant < annonce.MontantMinimum)
         {
-            throw new ConflictException("L'enchère doit être d'au moins " + annonce.MontantMinimum + " €.");
+            throw new ConflictException("L'enchère doit augmenter d'au moins " + annonce.PasEnchere + " €, soit " + annonce.MontantMinimum + " € minimum.");
         }
 
         var enchere = new Enchere

@@ -34,13 +34,7 @@ public class Annonce
 
     public decimal MontantMinimum
     {
-        get
-        {
-            if (Encheres.Count == 0)
-                return PrixDepart;
-
-            return PrixActuel + PasEnchere;
-        }
+        get { return PrixActuel + PasEnchere; }
     }
 
     public bool EstTerminee
