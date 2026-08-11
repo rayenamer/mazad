@@ -1,4 +1,5 @@
 using Backend.Api.Repositories;
+using Backend.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<AnnonceService>();
 
 builder.Services.AddSingleton<IAnnonceRepository>(_ =>
     InMemoryAnnonceRepository.DepuisFichier(
