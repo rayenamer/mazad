@@ -110,6 +110,7 @@ plus les cas passants, en vérifiant les codes 200 / 201 / 400 / 404 / 409.
 ---
 
 ## Ce que je n'ai pas eu le temps de faire
+- **Le probléme de concurrence** deux encheres exactes pour la meme annonce , ma solution ne traite pas ce cas
 
 - **Tri par prix ou date de fin.** Le tri par défaut privilégie les ventes ouvertes
   puis la clôture la plus proche. J'aurais ajouté un paramètre `?tri=` avec quelques
@@ -131,10 +132,102 @@ Rien n'est mis en cache aujourd'hui : chaque appel refait le travail complet.
 
 ### 1. Deux enchères exactement en même temps
 
+**Non, mon implémentation ne gère pas ce cas.**
+
+#### Le problème
+
+Placer une enchère se fait en trois temps :
+
+```
+1. lire le prix actuel        →  1850
+2. valider les règles         →  1900 > 1850, OK
+3. écrire la nouvelle enchère →  1900
+```
+Rien n'empêche une deuxième requête de s'intercaler entre l'étape 1 et l'étape 3.
+Deux personnes qui misent 1900 € lisent toutes les deux 1850, valident toutes les
+deux, et enregistrent toutes les deux. Deux gagnants au même prix, alors que ma
+règle exige un montant strictement supérieur au prix actuel.
+
+C'est le *lost update* : une séquence lire-modifier-écrire qui n'est pas
+**atomique**. Atomique veut dire indivisible ; soit l'opération se fait entièrement,
+soit pas du tout, mais jamais à moitié, et rien ne peut s'exécuter au milieu.
+Ici, l'opération est divisible en trois, donc vulnérable.
+
+#### La solution : rendre l'écriture atomique en une seule requête
+
+L'idée est de ne plus lire puis écrire, mais de **faire porter la condition par
+l'écriture elle-même** :
+
+```sql
+INSERT INTO encheres (annonce_id, pseudo, montant, date)
+SELECT @annonceId, @pseudo, @montant, NOW()
+WHERE @montant >= (
+    SELECT COALESCE(MAX(montant), a.prix_depart) + a.pas_enchere
+    FROM annonces a
+    LEFT JOIN encheres e ON e.annonce_id = a.id
+    WHERE a.id = @annonceId
+);
+```
+La base évalue la condition et fait l'insertion dans **la même instruction**. Elle
+garantit qu'aucune autre transaction ne s'intercale entre les deux — c'est
+exactement ce qu'on ne pouvait pas garantir en C#.
+
+Le résultat se lit au nombre de lignes affectées :
+
+- **1 ligne** → l'enchère est acceptée.
+- **0 ligne** → quelqu'un est passé avant, le montant n'est plus suffisant. On
+  renvoie un 409 avec le nouveau prix, le client réessaie.
+
+#### d'autres solutions:
 
 
-### 2. Passer à des milliers d'annonces et d'utilisateurs
 
+### 2. Des milliers d'annonces et d'utilisateurs
+
+Je vois deux niveaux : ce qui coince dans mon code, et ce qui manque autour.
+
+#### Dans mon code
+
+**Le stockage en mémoire, en premier.** Tout vit dans la RAM d'un seul processus.
+Rien ne survit à un redémarrage, et surtout : impossible de lancer une deuxième
+instance, les deux auraient chacune leurs données. C'est le blocage qui empêche
+tous les autres. `IAnnonceRepository` existe pour ça — il n'y a qu'une seconde
+implémentation à écrire, le service et les contrôleurs n'y touchent pas.
+
+**Le filtrage en mémoire.** `GetAll()` charge toutes les annonces puis filtre en
+C#. Sur cinq, invisible ; sur dix mille, l'API charge dix mille objets pour en
+renvoyer vingt. Il faut pousser filtres et tri dans la requête SQL, et ajouter une
+pagination (`?page=&taille=`) — aujourd'hui l'API renvoie tout, sans limite.
+
+**Le verrou applicatif.** Dès qu'il y a deux instances, elle ne protège plus rien. Il faut la
+déplacer dans la base 
+ c'est la
+condition pour pouvoir dupliquer l'API.
+
+**Le polling du frontend.** Chaque onglet ouvert appelle l'API  que quelque chose ait changé ou non. À mille utilisateurs connectés, ça
+fait 200 requêtes par seconde pour rien. SignalR pousserait la mise à jour au
+moment de l'enchère.
+
+#### Autour du code
+
+**Plusieurs instances derrière un load balancer.** Une seule API est un point de
+défaillance unique et un plafond de charge. C'est possible uniquement une fois les
+deux premiers points réglés : mon API doit être *stateless*, c'est-à-dire ne rien
+garder en mémoire entre deux requêtes.
+
+**Du cache sur la lecture.** Les annonces sont lues bien plus souvent qu'écrites.
+Mais un cache en mémoire par instance donnerait des prix différents selon le
+serveur qui répond , il faut un cache partagé type Redis. Et je ne cacherais pas
+le prix d'une vente en cours : servir une valeur périmée ferait refuser des
+enchères pourtant valides.
+
+**Authentification et rate limiting.** Aujourd'hui n'importe qui peut enchérir
+sous le pseudo d'un autre, et rien n'empêche d'inonder l'API. Avec du volume, ce
+n'est plus un détail.
+
+Dans l'ordre, je ferais : base de données → pagination et index → concurrence en
+base → plusieurs instances derrière un load balancer → cache → temps réel. Chaque
+étape débloque la suivante.
 
 ---
 
