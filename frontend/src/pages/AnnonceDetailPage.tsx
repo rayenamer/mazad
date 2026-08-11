@@ -4,6 +4,28 @@ import { obtenirAnnonce, placerEnchere } from '../api'
 import type { AnnonceDetail } from '../types'
 
 export default function AnnonceDetailPage() {
+   
+ function tempsRestant(dateFin: string): string {
+      const restant = new Date(dateFin).getTime() - Date.now()
+
+      if (restant <= 0) {
+        return 'Terminée'
+      }
+
+      const minutes = Math.floor(restant / 1000 / 60)
+      const heures = Math.floor(minutes / 60)
+      const jours = Math.floor(heures / 24)
+
+      if (jours > 0) {
+        return jours + ' jours'
+      }
+
+      if (heures > 0) {
+        return heures + ' heures'
+      }
+
+      return minutes + ' minutes'
+  }
   const { id } = useParams()
 
   const [annonce, setAnnonce] = useState<AnnonceDetail | null>(null)
@@ -37,6 +59,17 @@ export default function AnnonceDetailPage() {
         setChargement(false)
       })
   }, [id])
+  useEffect(() => {
+  if (!id) {
+    return
+  }
+
+  const timer = setInterval(() => {
+    obtenirAnnonce(id).then(setAnnonce).catch(() => {})
+  }, 5000)
+
+  return () => clearInterval(timer)
+}, [id])
 
   async function envoyer() {
     if (!id || !annonce) {
@@ -90,7 +123,10 @@ export default function AnnonceDetailPage() {
         <li>
           Prix actuel : <strong>{annonce.prixActuel} €</strong>
         </li>
-        <li>Clôture : {new Date(annonce.dateFin).toLocaleString('fr-FR')}</li>
+        <li>
+            Clôture : {new Date(annonce.dateFin).toLocaleString('fr-FR')}
+            {!terminee && <> — reste {tempsRestant(annonce.dateFin)}</>}
+        </li>
         <li>Statut : {terminee ? 'Terminée' : 'En cours'}</li>
       </ul>
 
