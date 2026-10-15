@@ -1,6 +1,6 @@
 <div align="center">
 
-# i-want-you-too
+# mazad
 
 **A small online auction app: browse listings, follow the current price, place bids.**
 
